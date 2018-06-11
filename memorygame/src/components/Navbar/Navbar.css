@@ -1,0 +1,12 @@
+.navbar {
+    width: 100%;
+    text-align: center;
+    color: white;
+    margin-bottom: 50px;
+    padding-top: 50px;
+    background-color: rgb(85, 2, 29);
+}
+
+.navbar-nav {
+  width: 100%;
+}
