@@ -5,38 +5,69 @@ import Navbar from "./components/Navbar";
 import friends from "./friends.json";
 import "./App.css";
 
+
+function shuffleArray(array) {
+  let i = array.length - 1;
+  for (; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
 class App extends Component {
   // Setting this.state.friends to the friends json array
   state = {
       friends,
-      unguessed:friends
+      correctGuess: true,
+      displayOrder: shuffleArray(friends)
   };
 
   clickedFriend = id => {
-    // Filter this.state.friends for friends with an id not equal to the id being removed
-    const unguessed = this.state.unguessed.filter(friend => friend.id !== id);
+    // shuffle the displayOrder
+    const displayOrder = shuffleArray(this.state.displayOrder);
+    
+    // Find friends with an id equal to the id clicked
+    const friend = this.state.friends[id];
+    
+    //create a copy of the friend array so we can update the guessed state
+    let friends = this.state.friends;
+    
+    //if the friend has not been clicked set the correct Guess to true
+    let correctGuess = false;
+    if (!friend.guessed) {
+      correctGuess = true;
+      //update the guessed flag on the friend id
+      friends[id].guessed = true;
+    }
+
+
     // Set this.state.friends equal to the new friends array
-    this.setState({ unguessed });
+    this.setState({ friends, correctGuess, displayOrder });
   };
 
   // Map over this.state.friends and render a FriendCard component for each friend object
   render() {
     return (
-      <Wrapper>
-        <Navbar 
-            message={'Click an image to play!'}
-            score={0}
-            topScore={0}
+      <div>
+        <Navbar
+          message={'Click an image to play!'}
+          score={0}
+          topScore={0}
         />
-        {this.state.friends.map(friend => (
-          <FriendCard
-            clickedFriend={this.clickedFriend}
-            id={friend.id}
-            key={friend.id}
-            image={friend.image}
-          />
-        ))}
-      </Wrapper>
+        <Wrapper>
+          {this.state.displayOrder.map(friend => (
+            <FriendCard
+              clickedFriend={this.clickedFriend}
+              id={friend.id}
+              key={friend.id}
+              image={friend.image}
+            />
+          ))}
+        </Wrapper>
+      </div>
     );
   }
 }

@@ -21,21 +21,21 @@ class Navbar extends Component {
     // 
     render() {
         return (
-            <nav class="navbar navbar-expand-lg">
-                <ul class="navbar-nav">
-                    <li class="nav-text col-4">               
-                        <a class="navbar-brand" href="#"><Title>Clicky Game</Title></a>
+            <nav className="navbar">
+                <ul>
+                    <li>               
+                        <a className="brand" href="#"><Title>Clicky Game</Title></a>
                     </li>    
-                    <li class="nav-text col-4">
+                    <li>
                         <PlayMessage 
                             message={this.props.message}>
                         </PlayMessage>
                     </li>
-                    <li class="nav-text col-4">
-                            <ScoreBoard 
-                            score={this.props.score} 
-                            topScore={this.props.topScore}> 
-                            </ScoreBoard>
+                    <li>
+                        <ScoreBoard 
+                        score={this.props.score} 
+                        topScore={this.props.topScore}> 
+                        </ScoreBoard>
                     </li>
                 </ul>
             </nav>
