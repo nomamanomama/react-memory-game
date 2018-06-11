@@ -21,8 +21,10 @@ class App extends Component {
   // Setting this.state.friends to the friends json array
   state = {
       friends,
-      correctGuess: true,
-      displayOrder: shuffleArray(friends)
+      displayOrder: shuffleArray(friends),
+      score: 0,
+      topScore: 0,
+      message: "Click any pic to begin!"
   };
 
   clickedFriend = id => {
@@ -30,22 +32,38 @@ class App extends Component {
     const displayOrder = shuffleArray(this.state.displayOrder);
     
     // Find friends with an id equal to the id clicked
-    const friend = this.state.friends[id];
+    const friend = this.state.friends.find(friend => (friend.id === id));
     
     //create a copy of the friend array so we can update the guessed state
-    let friends = this.state.friends;
+    let currentFriends = this.state.friends;
     
+    let score = this.state.score;
+    let topScore = this.state.topScore;
+    let message = '';
     //if the friend has not been clicked set the correct Guess to true
-    let correctGuess = false;
+    
     if (!friend.guessed) {
-      correctGuess = true;
+      //set win message
+      message = "Good job! You guessed correctly!";
+      //increment the score
+      score++;
+      //update topScore if this is the new topScore
+      if (topScore < score)
+        topScore = score;
       //update the guessed flag on the friend id
-      friends[id].guessed = true;
+      currentFriends.find(friend => (friend.id === id)).guessed = true;
+    }
+    else {
+      message = "You guessed incorrectly! Click any pic to start a new round.";
+      //reset the guessed flag
+      currentFriends.forEach(friend =>(friend.guessed = false));
+      //reset the score
+      score = 0;
     }
 
 
     // Set this.state.friends equal to the new friends array
-    this.setState({ friends, correctGuess, displayOrder });
+    this.setState({ currentFriends, displayOrder, score, topScore, message });
   };
 
   // Map over this.state.friends and render a FriendCard component for each friend object
@@ -53,9 +71,9 @@ class App extends Component {
     return (
       <div>
         <Navbar
-          message={'Click an image to play!'}
-          score={0}
-          topScore={0}
+          message={this.state.message}
+          score={this.state.score}
+          topScore={this.state.topScore}
         />
         <Wrapper>
           {this.state.displayOrder.map(friend => (
